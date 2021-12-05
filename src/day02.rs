@@ -16,14 +16,14 @@ pub(crate) fn day02() {
         match direction {
             "forward" => {
                 let value: i32 = instruction_iter.next().unwrap().parse::<i32>().unwrap();
-                position = position + value;
-                depth = aim * value + depth;
+                position += value;
+                depth += aim * value;
             }
             "up" => {
-                aim = aim - instruction_iter.next().unwrap().parse::<i32>().unwrap();
+                aim -= instruction_iter.next().unwrap().parse::<i32>().unwrap();
             }
             "down" => {
-                aim = aim + instruction_iter.next().unwrap().parse::<i32>().unwrap();
+                aim += instruction_iter.next().unwrap().parse::<i32>().unwrap();
             }
             _ => {
                 panic!("Unexpected operation: {}", direction);

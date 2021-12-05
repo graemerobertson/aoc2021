@@ -49,11 +49,11 @@ fn build_board(board_data: Vec<String>) -> Board {
     let mut rows: Vec<HashSet<u32>> = vec![HashSet::new(); 5];
     let mut columns: Vec<HashSet<u32>> = vec![HashSet::new(); 5];
     for (row_index, line) in board_data.into_iter().enumerate() {
-        let numbers: Vec<u32> = line
+        for (column_index, number) in line
             .split_whitespace()
             .map(|x| x.parse::<u32>().unwrap())
-            .collect();
-        for (column_index, number) in numbers.into_iter().enumerate() {
+            .enumerate()
+        {
             rows[row_index].insert(number);
             columns[column_index].insert(number);
         }
@@ -70,14 +70,14 @@ pub(crate) fn day04() {
     let reader: BufReader<File> = BufReader::new(f);
     let diagnostics: Vec<String> = reader.lines().collect::<io::Result<Vec<String>>>().unwrap();
     let called_numbers: Vec<u32> = diagnostics[0]
-        .split(",")
-        .map(|x| x.clone().trim().parse::<u32>().unwrap())
+        .split(',')
+        .map(|x| x.trim().parse::<u32>().unwrap())
         .collect();
 
     let mut boards: Vec<Board> = Vec::new();
     for lines in &diagnostics
         .into_iter()
-        .filter(|x| x.len() > 0 && !x.contains(','))
+        .filter(|x| !x.is_empty() && !x.contains(','))
         .chunks(5)
     {
         boards.push(build_board(lines.collect_vec()));

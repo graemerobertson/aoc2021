@@ -20,7 +20,7 @@ pub(crate) fn day03() {
     let mut epsilon_rate = "".to_string();
 
     for column in column_bits {
-        match column.matches("0").count() > column.matches("1").count() {
+        match column.matches('0').count() > column.matches('1').count() {
             true => {
                 gamma_rate += "0";
                 epsilon_rate += "1";
@@ -40,13 +40,12 @@ pub(crate) fn day03() {
 
     println!(
         "Life support rating: {}",
-        filter_diagnostics(diagnostics.clone(), true)
-            * filter_diagnostics(diagnostics.clone(), false)
+        filter_diagnostics(diagnostics.clone(), true) * filter_diagnostics(diagnostics, false)
     );
 }
 
 fn filter_diagnostics(diagnostics: Vec<String>, oxygen: bool) -> isize {
-    let mut filtered_diagnostics: Vec<String> = diagnostics.clone();
+    let mut filtered_diagnostics: Vec<String> = diagnostics;
     let mut column_index = 0;
     while filtered_diagnostics.len() > 1 {
         filtered_diagnostics =
@@ -84,10 +83,8 @@ fn filter_diagnostics_on_column(
         if delta >= 0 {
             keeper = '1';
         }
-    } else {
-        if delta < 0 {
-            keeper = '1';
-        }
+    } else if delta < 0 {
+        keeper = '1';
     }
 
     for binary_number in diagnostics {

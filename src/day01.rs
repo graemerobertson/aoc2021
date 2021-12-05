@@ -13,7 +13,7 @@ pub(crate) fn day01() {
     let mut part_1_increases_count: u32 = 0;
     for depth in depths.clone() {
         if depth > previous_depth {
-            part_1_increases_count = part_1_increases_count + 1;
+            part_1_increases_count += 1;
         }
         previous_depth = depth;
     }
@@ -23,7 +23,7 @@ pub(crate) fn day01() {
     let mut part_2_increases_count: u32 = 0;
     for n in 3..depths.len() {
         if depths.get(n).unwrap() > depths.get(n - 3).unwrap() {
-            part_2_increases_count = part_2_increases_count + 1;
+            part_2_increases_count += 1;
         }
     }
 
