@@ -52,9 +52,9 @@ pub(crate) fn day08() {
 
         for digit in &input_digits {
             if digit.len() == 6 {
-                if encoding_map[4].is_subset(&digit) {
+                if encoding_map[4].is_subset(digit) {
                     encoding_map[9] = digit.clone();
-                } else if encoding_map[1].is_subset(&digit) {
+                } else if encoding_map[1].is_subset(digit) {
                     encoding_map[0] = digit.clone();
                 } else {
                     encoding_map[6] = digit.clone();
