@@ -24,43 +24,44 @@ pub(crate) fn day12() {
         }
     }
 
-    println!("Part 1: {}", count_paths_to_end(&[], "start", &links, true));
+    println!(
+        "Part 1: {}",
+        count_paths_to_end(&["start".to_string(); 1], &links, true)
+    );
     println!(
         "Part 2: {}",
-        count_paths_to_end(&[], "start", &links, false)
+        count_paths_to_end(&["start".to_string(); 1], &links, false)
     );
 }
 
 fn count_paths_to_end(
     path_so_far: &[String],
-    next_cave: &str,
     links: &HashMap<String, Vec<String>>,
     already_contains_repeat_small_cave: bool,
 ) -> u32 {
     let mut count: u32 = 0;
-    for next_cave in links.get(next_cave).unwrap() {
-        if next_cave == "end" {
+    for next_cave in links.get(path_so_far.last().unwrap()).unwrap() {
+        if next_cave == "start" {
+            // Not interested
+            continue;
+        } else if next_cave == "end" {
             // We've found a complete path
             count += 1;
-        } else if next_cave != "start" {
-            // If we were back at start, we should drop this option
+        } else {
+            let mut now_contains_repeat_small_cave = already_contains_repeat_small_cave;
             if &next_cave.to_lowercase() == next_cave && path_so_far.contains(next_cave) {
-                // We're re-visiting a small cave
-                if !already_contains_repeat_small_cave {
-                    let mut updated_path_so_far = path_so_far.to_owned();
-                    updated_path_so_far.push(next_cave.to_string());
-                    count += count_paths_to_end(&updated_path_so_far, next_cave, links, true);
+                if already_contains_repeat_small_cave {
+                    // Second repeat small cave, not interested
+                    continue;
+                } else {
+                    now_contains_repeat_small_cave = true;
                 }
-            } else {
-                let mut updated_path_so_far = path_so_far.to_owned();
-                updated_path_so_far.push(next_cave.to_string());
-                count += count_paths_to_end(
-                    &updated_path_so_far,
-                    next_cave,
-                    links,
-                    already_contains_repeat_small_cave,
-                );
             }
+
+            let mut updated_path_so_far = path_so_far.to_owned();
+            updated_path_so_far.push(next_cave.to_string());
+            count +=
+                count_paths_to_end(&updated_path_so_far, links, now_contains_repeat_small_cave);
         }
     }
     count
