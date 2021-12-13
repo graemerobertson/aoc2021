@@ -12,9 +12,9 @@ pub(crate) fn day12() {
     let mut links: HashMap<String, Vec<String>> = HashMap::new();
     for line in diagnostics {
         let caves = line.split('-').collect::<Vec<&str>>();
-        let first_cave = links.entry(caves[0].to_string()).or_insert_with(|| vec![]);
+        let first_cave = links.entry(caves[0].to_string()).or_insert_with(Vec::new);
         first_cave.push(caves[1].to_string());
-        let second_cave = links.entry(caves[1].to_string()).or_insert_with(|| vec![]);
+        let second_cave = links.entry(caves[1].to_string()).or_insert_with(Vec::new);
         second_cave.push(caves[0].to_string());
     }
 
