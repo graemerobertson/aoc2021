@@ -18,8 +18,8 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
-// mod day19;
-// mod day20;
+mod day19;
+mod day20;
 // mod day21;
 // mod day22;
 // mod day23;
@@ -52,8 +52,8 @@ fn main() {
         16 => day16::day16(),
         17 => day17::day17(),
         18 => day18::day18(),
-        //         19 => day19::day19(),
-        //         20 => day20::day20(),
+        19 => day19::day19(),
+        20 => day20::day20(),
         //         21 => day21::day21(),
         //         22 => day22::day22(),
         //         23 => day23::day23(),
@@ -78,8 +78,8 @@ fn main() {
             day16::day16();
             day17::day17();
             day18::day18();
-            //             day19::day19();
-            //             day20::day20();
+            day19::day19();
+            day20::day20();
             //             day21::day21();
             //             day22::day22();
             //             day23::day23();
