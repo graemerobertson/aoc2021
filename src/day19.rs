@@ -24,9 +24,9 @@ pub(crate) fn day19() {
     let f: File = File::open("data/day19.txt").unwrap();
     let reader: BufReader<File> = BufReader::new(f);
     let diagnostics: Vec<String> = reader.lines().collect::<io::Result<Vec<String>>>().unwrap();
-    let mut scanners: HashMap<u32, HashSet<Coord>> = HashMap::new();
+    let mut scanners: HashMap<usize, HashSet<Coord>> = HashMap::new();
 
-    let mut current_scanner: u32 = 0;
+    let mut current_scanner: usize = 0;
     let mut current_scanner_beacons: HashSet<Coord> = HashSet::new();
 
     for line in diagnostics {
@@ -37,7 +37,7 @@ pub(crate) fn day19() {
                 static ref RE: Regex = Regex::new(r"--- scanner (\d+) ---$").unwrap();
             }
             let cap = RE.captures(&line).unwrap();
-            current_scanner = cap[1].parse::<u32>().unwrap();
+            current_scanner = cap[1].parse::<usize>().unwrap();
             current_scanner_beacons.clear();
         } else {
             let mut coords = line.split(',');
@@ -51,9 +51,9 @@ pub(crate) fn day19() {
     scanners.insert(current_scanner, current_scanner_beacons.clone());
 
     let mut all_beacons: HashSet<Coord> = HashSet::new();
-    let mut scanners_traversed: HashSet<u32> = HashSet::new();
+    let mut scanners_traversed: HashSet<usize> = HashSet::new();
     scanners_traversed.insert(0);
-    all_beacons.extend(scanners.get(&(0 as u32)).unwrap());
+    all_beacons.extend(scanners.get(&0).unwrap());
     let mut all_translations: HashSet<Translation> = HashSet::new();
     all_translations.insert(Translation {
         x: 0,
@@ -64,21 +64,20 @@ pub(crate) fn day19() {
     });
     loop {
         for target_scanner in 0..scanners.len() {
-            if !scanners_traversed.contains(&(target_scanner as u32)) {
+            if !scanners_traversed.contains(&target_scanner) {
                 continue;
             }
             for scanner in 1..scanners.len() {
-                if scanners_traversed.contains(&(scanner as u32)) {
+                if scanners_traversed.contains(&scanner) {
                     // We don't want to translate this, we'll match it on the next swing past
                     continue;
                 }
-                let target_scanner_beacons =
-                    scanners.get(&(target_scanner as u32)).unwrap().clone();
-                if scanner == target_scanner as usize {
+                if scanner == target_scanner {
                     // Not this.
                     continue;
                 }
-                let potential_matching_scanner_becaons = scanners.get(&(scanner as u32)).unwrap();
+                let target_scanner_beacons = scanners.get(&target_scanner).unwrap().clone();
+                let potential_matching_scanner_beacons = scanners.get(&scanner).unwrap();
                 'outer: for (target_beacon_index, target_beacon) in
                     target_scanner_beacons.iter().enumerate()
                 {
@@ -86,9 +85,9 @@ pub(crate) fn day19() {
                         break;
                     }
                     for (beacon_index, beacon) in
-                        potential_matching_scanner_becaons.iter().enumerate()
+                        potential_matching_scanner_beacons.iter().enumerate()
                     {
-                        if beacon_index > potential_matching_scanner_becaons.len() - 12 {
+                        if beacon_index > potential_matching_scanner_beacons.len() - 12 {
                             break;
                         }
                         for rotation_index_complex in 0..8 {
@@ -108,7 +107,7 @@ pub(crate) fn day19() {
                                 };
 
                                 let mut translated_beacon_set: HashSet<Coord> = HashSet::new();
-                                for gdr_beacon in potential_matching_scanner_becaons {
+                                for gdr_beacon in potential_matching_scanner_beacons {
                                     let mut tmp_beacon = rotate_beacon(
                                         gdr_beacon,
                                         potential_translation.rotation_index_complex,
@@ -126,9 +125,9 @@ pub(crate) fn day19() {
                                 {
                                     all_translations.insert(potential_translation);
                                     all_beacons.extend(translated_beacon_set.clone());
-                                    scanners.insert(scanner as u32, translated_beacon_set);
+                                    scanners.insert(scanner, translated_beacon_set);
 
-                                    scanners_traversed.insert(scanner as u32);
+                                    scanners_traversed.insert(scanner);
                                     if scanners_traversed.len() == scanners.len() {
                                         println!(
                                             "Total number of beacons is {}",
