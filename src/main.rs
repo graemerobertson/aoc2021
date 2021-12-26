@@ -23,7 +23,7 @@ mod day20;
 mod day21;
 // mod day22;
 // mod day23;
-// mod day24;
+mod day24;
 // mod day25;
 
 #[derive(StructOpt)]
@@ -57,7 +57,7 @@ fn main() {
         21 => day21::day21(),
         //         22 => day22::day22(),
         //         23 => day23::day23(),
-        //         24 => day24::day24(),
+        24 => day24::day24(),
         //         25 => day25::day25(),
         411 => {
             day01::day01();
@@ -83,7 +83,7 @@ fn main() {
             day21::day21();
             //             day22::day22();
             //             day23::day23();
-            //             day24::day24();
+            day24::day24();
             //             day25::day25();
         }
         _ => println!("Unimplemented day: {}", args.day),
