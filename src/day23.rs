@@ -44,16 +44,16 @@ pub(crate) fn day23() {
         Space::C => vec![Space::D, Space::A, Space::B, Space::A],
         Space::D => vec![Space::A, Space::C, Space::A, Space::B],
     };
-    println!("{}", run(&hallway, &amphipod_rooms, 0, 0));
+    println!("{}", run(&hallway, &amphipod_rooms, 0, None));
 }
 
 fn run(
     hallway: &[Space],
     amphipod_rooms: &HashMap<Space, Vec<Space>>,
     current_energy_spent: u32,
-    bound: u32,
+    bound: Option<u32>,
 ) -> u32 {
-    let mut min_energy = bound;
+    let mut min_energy = bound.unwrap_or(u32::MAX);
     // For each room...
     for (room_type, room) in amphipod_rooms {
         // If we need to move amphipods out of the room...
@@ -91,7 +91,7 @@ fn run(
                     flush_hallway_and_rooms(&mut forked_hallway, &mut forked_amphipod_rooms);
 
                 // If we've not already exceeded the minimum required energy...
-                if min_energy == 0 || forked_current_energy_spent < min_energy {
+                if forked_current_energy_spent < min_energy {
                     // Check if everyone is home, and record the new minimum energy, or
                     // go back through this process.
                     if check_win(&forked_amphipod_rooms) {
@@ -101,7 +101,7 @@ fn run(
                             &forked_hallway,
                             &forked_amphipod_rooms,
                             forked_current_energy_spent,
-                            min_energy,
+                            Some(min_energy),
                         );
                     }
                 }
@@ -251,7 +251,7 @@ mod tests {
         let current_energy_spent: u32 = 5500;
 
         assert_eq!(
-            run(&hallway, &amphipod_rooms, current_energy_spent, 0),
+            run(&hallway, &amphipod_rooms, current_energy_spent, None),
             6103
         );
     }
@@ -271,7 +271,7 @@ mod tests {
         let current_energy_spent: u32 = 5500;
 
         assert_eq!(
-            run(&hallway, &amphipod_rooms, current_energy_spent, 0),
+            run(&hallway, &amphipod_rooms, current_energy_spent, None),
             6322
         );
     }
@@ -289,7 +289,7 @@ mod tests {
         amphipod_rooms.insert(Space::C, c_room);
         amphipod_rooms.insert(Space::D, d_room);
 
-        assert_eq!(run(&hallway, &amphipod_rooms, 0, 0), 14350);
+        assert_eq!(run(&hallway, &amphipod_rooms, 0, None), 14350);
     }
 
     #[test]
@@ -305,7 +305,7 @@ mod tests {
         amphipod_rooms.insert(Space::C, c_room);
         amphipod_rooms.insert(Space::D, d_room);
 
-        assert_eq!(run(&hallway, &amphipod_rooms, 0, 0), 49742);
+        assert_eq!(run(&hallway, &amphipod_rooms, 0, None), 49742);
     }
 
     #[test]
